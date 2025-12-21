@@ -1,12 +1,12 @@
 import streamlit as st
 from openai import OpenAI
+import datetime  # 导入日期库
 
 # 1. 页面配置 (星星妍专属设定)
 st.set_page_config(page_title="你的 AI 助手星星妍", page_icon="🌟") 
 st.title("🌟 你的专属AI助手 星星妍")
 
 # 2. 配置 DeepSeek API
-# 请确保你的 Key 是正确的，并且账户里有余额
 client = OpenAI(
     api_key=st.secrets["DEEPSEEK_API_KEY"],
     base_url="https://api.deepseek.com"
@@ -33,11 +33,19 @@ if prompt := st.chat_input("想问星星妍什么？"):
         response_container = st.empty() 
         full_response = ""
         
-        # 构建带有身份设定的消息列表
-        # 这一步是为了让 AI 记住它是周志成开发的星星妍
+        # --- 核心修改部分：实时获取当前时间 ---
+        now = datetime.datetime.now()
+        current_date = now.strftime("%Y年%m月%d日 %A") 
+        # ------------------------------------
+
+        # 构建带有身份设定和时间注入的消息列表
         messages_for_api = [
-            {"role": "system", "content": "你是由周志成开发的AI智能助手，你的名字叫星星妍。当被问及你是谁时，请绝对不要提到 DeepSeek，只需说你是星星妍。"}
+            {
+                "role": "system", 
+                "content": f"你是由周志成开发的AI智能助手，你的名字叫星星妍。今天是{current_date}。当被问及你是谁时，请绝对不要提到 DeepSeek，只需说你是星星妍。如果你被问到时间或日期，请基于我提供给你的当前时间进行回答。"
+            }
         ]
+        
         # 将用户之前的对话也加进去
         for m in st.session_state.messages:
             messages_for_api.append({"role": m["role"], "content": m["content"]})
