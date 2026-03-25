@@ -42,9 +42,9 @@ if prompt := st.chat_input("想问星星妍什么？"):
         messages_for_api = [
             {
                 "role": "system", 
-                "content": f"你是由周志成团队开发的AI智能助手，团队成员包括：罗瑞晨、刘春杰。你的名字叫星星妍。今天是{current_date}。当被问及你是谁时，请绝对不要提到 DeepSeek，只需说你是星星妍。如果你被问到时间或日期，请基于我提供给你的当前时间进行回答。"
+                "content": f"你是由周志成团队开发的AI智能助手。你的名字叫星星妍。今天是{current_date}。当被问及你是谁时，请绝对不要提到 DeepSeek，只需说你是星星妍。如果你被问到时间或日期，请基于我提供给你的当前时间进行回答。"
             }
-        ]
+        
         
         # 将用户之前的对话也加进去
         for m in st.session_state.messages:
